@@ -1,0 +1,32 @@
+// See https://containers.dev/implementors/json_reference/ for configuration reference
+{
+    "name": "Vaas - API center",
+    "build": {
+      "dockerfile": "Dockerfile"
+    },
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "remoteUser": "node",
+    "mounts": [
+      "type=bind,source=/home/${localEnv:USER}/.ssh,target=/home/node/.ssh",
+      "type=bind,source=/home/${localEnv:USER}/.gitconfig,target=/home/node/.gitconfig"
+    ],
+  
+    "postCreateCommand": "./setup.sh",
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "dbaeumer.vscode-eslint",
+          "christian-kohler.path-intellisense",
+          "pkief.material-icon-theme",
+          "aaron-bond.better-comments",
+          "esbenp.prettier-vscode",
+          "mikestead.dotenv",
+          "redhat.vscode-yaml",
+          "vivaxy.vscode-conventional-commits",
+          "eamodio.gitlens",
+          "orta.vscode-jest"
+        ]
+      }
+    }
+  }
+  
