@@ -15,7 +15,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CharacterService } from './character.service';
-import { Character } from './entities/character.entity';
+import { Budget, Character } from './entities/character.entity';
 
 @Controller('characters')
 @ApiTags('characters')
@@ -56,5 +56,12 @@ export class CharacterController {
   @ApiResponse({ status: 200, description: 'O personagem foi removido com sucesso' })
   remove(@Request() req, @Param('id') id: string) {
     return this.characterService.remove(req.user.sub, id);
+  }
+
+  @Get(':id/budget')
+  @ApiOperation({ summary: 'Obtém a carteira de personagem pelo ID' })
+  @ApiResponse({ status: 200, description: 'Retorna o budget de um personagem', type: Budget })
+  findOneBudget(@Request() req, @Param('id') id: string) {
+    return this.characterService.findOneBudget(req.user.sub, id);
   }
 }

@@ -1,9 +1,10 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Item } from './entities/item.entity';
 import { ItemsService } from './items.service';
 
 @Controller('items')
+@ApiTags('items')
 export class ItemsController {
   constructor(private readonly itemsService: ItemsService) { }
 
@@ -16,6 +17,6 @@ export class ItemsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.itemsService.findOne(+id);
+    return this.itemsService.findOne(id);
   }
 }

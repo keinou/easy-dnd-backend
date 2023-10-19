@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import mongoose from "mongoose";
 
@@ -43,3 +43,5 @@ export class Item {
     @ApiProperty({ description: 'Precisa de sintonização?' })
     attunement: string;
 }
+
+export const ItemSchema = SchemaFactory.createForClass(Item);

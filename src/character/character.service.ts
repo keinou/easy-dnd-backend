@@ -1,6 +1,7 @@
 // src/character/character.service.ts
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { validate } from 'class-validator';
 import { Model } from 'mongoose';
 import { Character } from './entities/character.entity';
 
@@ -11,9 +12,22 @@ export class CharacterService {
   ) { }
 
   async create(characterData: Character, ownerId: string): Promise<Character> {
-    const character = new this.characterModel(characterData);
+    const character = new Character();
     character.ownerId = ownerId;
-    return character.save();
+    character.name = characterData.name;
+    character.class = characterData.class;
+    character.race = characterData.race;
+    character.level = characterData.level;
+    character.budget = characterData.budget;
+
+    const errors = await validate(character);
+    if (errors.length > 0) {
+      throw new BadRequestException(errors);
+    }
+
+    const db = new this.characterModel(character);
+
+    return db.save();
   }
 
   async findAll(ownerId: string): Promise<Character[]> {
@@ -22,6 +36,15 @@ export class CharacterService {
 
   async findOne(ownerId: string, id: string): Promise<Character> {
     const character = this.characterModel.findById(id, { ownerId: ownerId }).exec();
+
+    if (!character)
+      throw new NotFoundException();
+
+    return character
+  }
+
+  async findOneBudget(ownerId: string, id: string): Promise<Character> {
+    const character = this.characterModel.findById(id, { ownerId: ownerId }, { fields: 'budget' }).exec();
 
     if (!character)
       throw new NotFoundException();

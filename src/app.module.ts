@@ -10,13 +10,13 @@ import { ItemsModule } from './items/items.module';
 
 @Module({
   imports: [
-    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
     MongooseModule.forRoot(process.env.MONGO_URI),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    AuthModule,
     CharacterModule,
     ItemsModule,
   ],
