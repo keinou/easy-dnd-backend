@@ -8,6 +8,7 @@ import { User, UserSchema } from './auth/entities/auth.entity';
 import { CharacterModule } from './character/character.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { ItemsModule } from './items/items.module';
+import { RaceModule } from './race/race.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ItemsModule } from './items/items.module';
     CharacterModule,
     ItemsModule,
     InventoryModule,
+    RaceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
