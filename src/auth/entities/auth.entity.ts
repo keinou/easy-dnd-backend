@@ -11,7 +11,7 @@ export enum AuthStategy {
 }
 
 @Schema()
-export class User {
+export class User extends Document {
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, auto: true })
     @ApiProperty({ description: 'ID do usuário' })

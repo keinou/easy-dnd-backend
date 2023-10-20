@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { User, UserSchema } from './auth/entities/auth.entity';
 import { CharacterModule } from './character/character.module';
+import { InventoryModule } from './inventory/inventory.module';
 import { ItemsModule } from './items/items.module';
 
 @Module({
@@ -19,6 +20,7 @@ import { ItemsModule } from './items/items.module';
     AuthModule,
     CharacterModule,
     ItemsModule,
+    InventoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

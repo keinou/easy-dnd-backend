@@ -64,12 +64,15 @@ export class CharacterController {
   findOneBudget(@Request() req, @Param('id') id: string) {
     return this.characterService.findOneBudget(req.user.sub, id);
   }
+
   @Put(':id/budget')
-  @ApiOperation({summary: 'Atualiza a carteira do personagem pelo ID'})
-  @ApiResponse({status: 200, description:'A carteira foi atualizada com sucesso'})
-  updateBudget(@Request() req, @Param('id') id: string, @Body() budgetData: Budget ){
+  @ApiOperation({ summary: 'Atualiza a carteira do personagem pelo ID' })
+  @ApiResponse({ status: 200, description: 'A carteira foi atualizada com sucesso' })
+  async updateBudget(@Request() req, @Param('id') id: string, @Body() budgetData: Budget) {
     const character = new Character();
     character.budget = budgetData;
-    return this.characterService.update(req.user.sub, id, character)
+
+    const result = await this.characterService.update(req.user.sub, id, character);
+    return result.budget;
   }
 }

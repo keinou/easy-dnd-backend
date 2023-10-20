@@ -2,9 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 import mongoose from 'mongoose';
-import { Item } from 'src/items/entities/item.entity';
+import { User } from 'src/auth/entities/auth.entity';
+import { Inventory } from '../../inventory/entities/inventory.entity';
 
-@Schema()
 export class Budget {
     @ApiProperty({ description: 'Copper piece' })
     @Prop()
@@ -24,18 +24,11 @@ export class Budget {
 }
 
 @Schema()
-export class InventoryItem {
-    @ApiProperty({ description: 'Quantidade' })
-    @Prop()
-    quantity: number;
-
-    @ApiProperty({ description: 'Item' })
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'items' })
-    item: Item;
-}
-
-@Schema()
 export class Character {
+    @Prop({ type: mongoose.Schema.Types.ObjectId, auto: true })
+    @ApiProperty({ description: 'ID do usuário' })
+    _id: string;
+
     @ApiProperty({ description: 'O nome do personagem' })
     @IsNotEmpty()
     @Prop()
@@ -51,25 +44,26 @@ export class Character {
     @ApiProperty({ description: 'A classe do personagem' })
     class: string;
 
-    @Prop()
+    @Prop({ type: Budget })
     @ApiProperty({ description: 'Carteira' })
     budget: Budget;
-
-    // @Prop({})
-    // @ApiProperty({ description: 'Inventario', type: [InventoryItem] })
-    // inventory: InventoryItem[];
 
     @ApiProperty({ description: 'O nível do personagem' })
     @IsNotEmpty()
     @Prop()
     level: number;
 
+    @ApiProperty({ description: 'O ID do inventario do personagem' })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Inventory" })
+    _inventory: Inventory["_id"];
+
     @ApiProperty({ description: 'O ID do proprietário do personagem' })
     @IsNotEmpty()
-    @Prop({ type: String })
-    ownerId: string;
-}
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
+    _owner: User["_id"];
 
+}
 export const CharacterSchema = SchemaFactory.createForClass(Character);
-export const BudgetSchema = SchemaFactory.createForClass(Budget);
-export const InventoryItemSchema = SchemaFactory.createForClass(InventoryItem);
+CharacterSchema.index({ _owner: 1, name: 1 });
+
+//export const BudgetSchema = SchemaFactory.createForClass(Budget);

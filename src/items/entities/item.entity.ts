@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import mongoose from "mongoose";
-
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 export type ItemDocument = Item & Document;
 
 @Schema()
@@ -45,3 +45,4 @@ export class Item {
 }
 
 export const ItemSchema = SchemaFactory.createForClass(Item);
+ItemSchema.plugin(mongoosePaginate);
