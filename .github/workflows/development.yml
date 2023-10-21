@@ -36,32 +36,20 @@ jobs:
           platforms: linux/amd64, linux/arm64
           tags: registry.karc.io/dnd/shield-backend:dev
 
-  # deploy:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v2
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-  #     - name: Set up kubectl
-  #       uses: azure/k8s-set-context@v1
-  #       with:
-  #         kubeconfig: ${{ secrets.KUBE_CONFIG }}
-  #         version: "latest"
+      - name: Set up kubectl
+        uses: azure/k8s-set-context@v1
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+          version: "latest"
 
-  #     - name: Apply Kubernetes configs
-  #       run: |
-  #         kubectl apply -f k8s/
-  #         kubectl rollout restart deployment/masgud-whatsapp -n masgud
-
-  #     - name: HTTP POST on success
-  #       if: success()
-  #       run: |
-  #         message="🛠️ Deploy success under construction for $GITHUB_REPOSITORY."
-  #         curl --location "https://masgud.karc.io/wa/karc" --header "x-token: 19122d1d-cb27-4cf6-83fd-b62b46769912" --header "Content-Type: application/json" --data-raw "{\"to\": \"120363144514481553@g.us\",\"body\": \"$message\"}"
-
-  #     - name: HTTP POST on failure
-  #       if: failure()
-  #       run: |
-  #         message="🔥 Deploy failure under construction for $GITHUB_REPOSITORY."
-  #         curl --location "https://masgud.karc.io/wa/karc" --header "x-token: 19122d1d-cb27-4cf6-83fd-b62b46769912" --header "Content-Type: application/json" --data-raw "{\"to\": \"120363144514481553@g.us\",\"body\": \"$message\"}"
+      - name: Apply Kubernetes menifests
+        run: |
+          kubectl apply -n dnd-easy-dev -f k8s/
+          kubectl rollout restart -n dnd-easy-dev deployment/shield-backend

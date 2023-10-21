@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shield-backend
+spec:
+  selector:
+    matchLabels:
+      app: shield-backend
+  template:
+    metadata:
+      labels:
+        app: shield-backend
+    spec:
+      containers:
+        - name: shield-backend
+          image: registry.karc.io/dnd/shield-backend:dev
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: shield-config
+                  key: mongo-uri
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "128Mi"
+              cpu: "50m"
+          ports:
+            - containerPort: 3000
