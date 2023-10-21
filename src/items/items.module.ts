@@ -12,5 +12,6 @@ import { ItemsService } from './items.service';
   ],
   controllers: [ItemsController],
   providers: [ItemsService],
+  exports: [ItemsService]
 })
 export class ItemsModule { }

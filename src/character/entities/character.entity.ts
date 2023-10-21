@@ -4,6 +4,7 @@ import { IsNotEmpty } from 'class-validator';
 import mongoose from 'mongoose';
 import { User } from 'src/auth/entities/auth.entity';
 import { Inventory } from '../../inventory/entities/inventory.entity';
+export type CharacterDocument = Character & Document;
 
 export class Budget {
     @ApiProperty({ description: 'Copper piece' })

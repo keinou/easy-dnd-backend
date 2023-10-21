@@ -4,6 +4,7 @@ import { IsNotEmpty } from "class-validator";
 import mongoose from "mongoose";
 import { User } from "src/auth/entities/auth.entity";
 import { Character } from "src/character/entities/character.entity";
+import { Item } from "src/items/entities/item.entity";
 
 export class InventoryItem {
     @ApiProperty({ description: 'Quantidade' })
@@ -11,8 +12,8 @@ export class InventoryItem {
     quantity: number;
 
     @ApiProperty({ description: 'Item' })
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'items' })
-    item: User["_id"];
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Item' })
+    item: Item["_id"];
 
     @ApiProperty({ description: 'Observacao/Notas do jogador' })
     @Prop()

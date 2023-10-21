@@ -56,7 +56,6 @@ export class AuthService {
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
-    console.log(ticket.getPayload(), 'ticket');
 
     const { email, name, picture } = ticket.getPayload();
     const data = await this.login({ email, name, image: picture, strategy: AuthStategy.GOOGLE });
@@ -85,7 +84,6 @@ export class AuthService {
       await newUser.save();
 
     } else {
-      console.log(user);
       user.lastLoginAt = now;
       await user.save();
     }

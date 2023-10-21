@@ -9,14 +9,16 @@ import {
   Request
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOperation,
   ApiResponse,
-  ApiTags,
+  ApiTags
 } from '@nestjs/swagger';
 import { CharacterService } from './character.service';
 import { Budget, Character } from './entities/character.entity';
 
+@ApiBearerAuth()
 @Controller('characters')
 @ApiTags('characters')
 export class CharacterController {

@@ -9,8 +9,14 @@ export class ItemsService {
     @InjectModel(Item.name) private itemModel: PaginateModel<Item>,
   ) { }
 
-  async findAll(page: number, pageSize: number) {
-    const response = await this.itemModel.paginate(null, {
+  async findAll(page: number, pageSize: number, filter: string) {
+    const query = {};
+
+    if (filter) {
+      query['name'] = { $regex: new RegExp(filter, 'i') };
+    }
+
+    const response = await this.itemModel.paginate(query, {
       page: page,
       limit: pageSize
     });
