@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { CreateRaceDto } from './dto/create-race.dto';
-import { UpdateRaceDto } from './dto/update-race.dto';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Race } from './entities/race.entity';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class RaceService {
-  create(createRaceDto: CreateRaceDto) {
-    return 'This action adds a new race';
+  constructor(@InjectModel(Race.name) private raceModel: Model<Race>) {}
+
+  async create(raceEntity: Race): Promise<Race> {
+    const race = await this.raceModel.findOne(raceEntity.name);
+    if (race) {
+      throw new BadRequestException('A race with the same name already exists');
+    }
+    return this.raceModel.create(raceEntity);
+  }
+  async findAll(): Promise<Array<Race>> {
+    const races = await this.raceModel.find();
+    return races;
   }
 
-  findAll() {
-    return `This action returns all race`;
+  async findOne(id: string): Promise<Race> {
+    const race = await this.raceModel.findById(id);
+
+    if (!race) {
+      throw new NotFoundException();
+    }
+
+    return race;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} race`;
+  async update(id: string, raceEntity: Race): Promise<Race> {
+    return this.raceModel.findByIdAndUpdate(id, raceEntity, { new: true });
   }
 
-  update(id: number, updateRaceDto: UpdateRaceDto) {
-    return `This action updates a #${id} race`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} race`;
+  async remove(id: string): Promise<Race> {
+    return this.raceModel.findByIdAndRemove(id);
   }
 }

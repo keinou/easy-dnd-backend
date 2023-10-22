@@ -27,12 +27,12 @@ export class Race {
 
   @Prop()
   @IsNotEmpty()
-  @ApiProperty({ description: 'Tamanho da raça', type: SizeEnum })
+  @ApiProperty({ description: 'Tamanho da raça', enum: SizeEnum, enumName: 'SizeEnum' })
   size: SizeEnum;
 
   @Prop()
   @IsNotEmpty()
-  @ApiProperty({ description: 'Origem', type: SourceEnum })
+  @ApiProperty({ description: 'Origem', enum: SourceEnum, enumName: 'SourceEnum' })
   source: SourceEnum;
 
   @Prop()
