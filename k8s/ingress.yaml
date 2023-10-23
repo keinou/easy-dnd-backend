@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monolith
+  annotations:
+    konghq.com/strip-path: "true"
+    kubernetes.io/ingress.class: "kong"
+spec:
+  ingressClassName: kong
+  rules:
+    - host: dnd-dev.karc.io
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: shield-backend
+                port:
+                  number: 3000
