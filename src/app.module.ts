@@ -9,6 +9,7 @@ import { CharacterModule } from './character/character.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { ItemsModule } from './items/items.module';
 import { RaceModule } from './race/race.module';
+import { CampaignModule } from './campaign/campaign.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RaceModule } from './race/race.module';
     ItemsModule,
     InventoryModule,
     RaceModule,
+    CampaignModule,
   ],
   controllers: [AppController],
   providers: [AppService],
