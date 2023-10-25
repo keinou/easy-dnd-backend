@@ -5,9 +5,7 @@ import { Item } from './entities/item.entity';
 
 @Injectable()
 export class ItemsService {
-  constructor(
-    @InjectModel(Item.name) private itemModel: PaginateModel<Item>,
-  ) { }
+  constructor(@InjectModel(Item.name) private itemModel: PaginateModel<Item>) {}
 
   async findAll(page: number, pageSize: number, filter: string) {
     const query = {};
@@ -18,7 +16,7 @@ export class ItemsService {
 
     const response = await this.itemModel.paginate(query, {
       page: page,
-      limit: pageSize
+      limit: pageSize,
     });
 
     return response;
@@ -26,5 +24,36 @@ export class ItemsService {
 
   findOne(id: string) {
     return this.itemModel.findById(id);
+  }
+
+  async changedWeight() {
+    const itens = await this.itemModel.find();
+    for (let i = 0; i < itens.length; i++) {
+      if (itens[i].strweight != null) {
+        if (itens[i].strweight.includes('oz')) {
+          const oz = parseFloat(itens[i].strweight.replace(',', '.'));
+          const kg = (oz * 0.02834952).toFixed(2);
+        
+          try {
+            await this.itemModel.findByIdAndUpdate(itens[i]._id, {
+              $set: { weight: parseFloat(kg) },
+            });
+          } catch (error) {
+            console.error('deu erro no ${itens[i]._id}');
+          }
+        }
+        if (itens[i].strweight.includes('lb')) {
+          const lb = parseFloat(itens[i].strweight.replace(',', '.'));
+          const kg = (lb * 0.45359237).toFixed(2);
+          try {
+            await this.itemModel.findByIdAndUpdate(itens[i]._id, {
+              $set: { weight: parseFloat(kg) },
+            });
+          } catch (error) {
+            console.error('deu erro no ${itens[i]._id}');
+          }
+        }
+      }
+    }
   }
 }

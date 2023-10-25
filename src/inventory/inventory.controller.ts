@@ -31,4 +31,10 @@ export class InventoryController {
   removeInventoryItem(@Request() req, @Param('id') id: string, @Body() item: InventoryItem) {
     return this.inventoryService.removeInventoryItem(id, req.user.sub, item);
   }
+
+  @Get('/resume')
+  resumeInventory(@Request() req, @Param('id') id: string){
+    return this.inventoryService.resumeInventory(id, req.user.sub)
+  }
+//Total de itens e peso total
 }
