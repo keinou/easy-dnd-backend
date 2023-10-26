@@ -12,7 +12,7 @@ export class InventoryService {
     private readonly characterService: CharacterService,
     private readonly itemService: ItemsService,
     @InjectModel(Inventory.name) private inventoryModel: Model<Inventory>,
-  ) { }
+  ) {}
 
   async getInventory(characterId: string, ownerId: string) {
     const character = await this.characterService.findOne(ownerId, characterId);
@@ -28,7 +28,9 @@ export class InventoryService {
     try {
       checkItem = (await this.itemService.findOne(item.item)).toObject();
     } catch (error) {
-      throw new BadRequestException("Item with id '" + item.item + "' does not exists!");
+      throw new BadRequestException(
+        "Item with id '" + item.item + "' does not exists!",
+      );
     }
 
     const inventory = (await this.getInventory(characterId, ownerId)).toObject();
@@ -51,12 +53,18 @@ export class InventoryService {
     return inventory;
   }
 
-  async removeInventoryItem(characterId: string, ownerId: string, item: InventoryItem) {
+  async removeInventoryItem(
+    characterId: string,
+    ownerId: string,
+    item: InventoryItem,
+  ) {
     let checkItem: Item;
     try {
       checkItem = (await this.itemService.findOne(item.item)).toObject();
     } catch (error) {
-      throw new BadRequestException("Item with id '" + item.item + "' does not exists!");
+      throw new BadRequestException(
+        "Item with id '" + item.item + "' does not exists!",
+      );
     }
 
     const inventory = await this.getInventory(characterId, ownerId);
@@ -66,9 +74,14 @@ export class InventoryService {
       const invItem = inventory.items[i] as any;
 
       if (invItem.item === checkItem._id.toString()) {
-
         if (invItem.quantity < item.quantity)
-          throw new BadRequestException('You have only ' + invItem.quantity + " '" + checkItem.name + "(s)' in inventory.");
+          throw new BadRequestException(
+            'You have only ' +
+              invItem.quantity +
+              " '" +
+              checkItem.name +
+              "(s)' in inventory.",
+          );
 
         invItem.quantity -= item.quantity;
         itemExists = true;
@@ -82,7 +95,9 @@ export class InventoryService {
     }
 
     if (!itemExists) {
-      throw new BadRequestException("You dont have a '" + checkItem.name + "' in inventory!");
+      throw new BadRequestException(
+        "You dont have a '" + checkItem.name + "' in inventory!",
+      );
     }
 
     await this.updateInventory(inventory);
@@ -90,4 +105,16 @@ export class InventoryService {
     return inventory;
   }
 
+  async resumeInventory(characterId: string, ownerId: string) {
+    const inventory = (await this.getInventory(characterId, ownerId)).toObject();
+    const totalItems = inventory.items.length;
+    var totalPeso = 0;
+    for (var i = 0; i < totalItems; i++) {
+      const item = await this.itemService.findOne(inventory.items[i].item);
+      totalPeso += item.weight;
+    }
+
+    return { 'totalItens' : totalItems,'totalPeso': totalPeso };
+  }
+    //Total de itens e peso total
 }

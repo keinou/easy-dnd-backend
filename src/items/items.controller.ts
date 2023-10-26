@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Put, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOAuth2, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Item } from './entities/item.entity';
 import { ItemsService } from './items.service';
@@ -23,4 +23,17 @@ export class ItemsController {
   findOne(@Param('id') id: string) {
     return this.itemsService.findOne(id);
   }
+
+  @Put('convert')
+  convertWeight(){
+    return this.itemsService.changedWeight()
+  }
+
+  @Get('convert')
+  test(){
+    const stringTest = '1,2 oz'
+    const stringConvert = stringTest.replace(',', '.')
+    console.log( parseFloat( stringConvert))
+  }
+
 }

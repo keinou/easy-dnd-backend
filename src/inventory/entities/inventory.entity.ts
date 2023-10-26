@@ -39,8 +39,7 @@ export class Inventory {
     @ApiProperty({ description: 'Items no inventario' })
     @IsNotEmpty()
     @Prop()
-    items: typeof InventoryItemSchema[];
+    items:  InventoryItem [];
 }
 
 export const InventorySchema = SchemaFactory.createForClass(Inventory);
-export const InventoryItemSchema = SchemaFactory.createForClass(InventoryItem);
