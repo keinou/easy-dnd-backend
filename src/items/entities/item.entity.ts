@@ -34,10 +34,6 @@ export class Item {
     @Prop()
     @ApiProperty({ description: 'Peso do item' })
     weight: number;
-  
-    @Prop()
-    @ApiProperty({ description: 'String Peso do item' })
-    strweight: string;
 
     @Prop()
     @ApiProperty({ description: 'Valor médio do item' })

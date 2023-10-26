@@ -114,7 +114,6 @@ export class InventoryService {
       totalPeso += item.weight;
     }
 
-    return { 'totalItens' : totalItems,'totalPeso': totalPeso };
+    return { totalItems: totalItems, totalWeigth: totalPeso };
   }
-    //Total de itens e peso total
 }
