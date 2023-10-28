@@ -8,7 +8,7 @@ export class RaceService {
   constructor(@InjectModel(Race.name) private raceModel: Model<Race>) {}
 
   async create(raceEntity: Race): Promise<Race> {
-    const race = await this.raceModel.findOne(raceEntity.name);
+    const race = await this.raceModel.findOne({ name: raceEntity.name });
     if (race) {
       throw new BadRequestException('A race with the same name already exists');
     }
