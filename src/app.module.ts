@@ -4,12 +4,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { User, UserSchema } from './auth/entities/auth.entity';
+import { CampaignModule } from './campaign/campaign.module';
 import { CharacterModule } from './character/character.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { ItemsModule } from './items/items.module';
 import { RaceModule } from './race/race.module';
-import { CampaignModule } from './campaign/campaign.module';
 
 @Module({
   imports: [
@@ -18,7 +17,6 @@ import { CampaignModule } from './campaign/campaign.module';
       envFilePath: '.env',
     }),
     MongooseModule.forRoot(process.env.MONGO_URI),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     AuthModule,
     CharacterModule,
     ItemsModule,

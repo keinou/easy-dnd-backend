@@ -97,7 +97,7 @@ export class AuthService {
   async create(newUser: User) {
     let findUser = await this.userModel.findOne({ email: newUser.email });
     if (findUser) {
-      throw new BadRequestException();
+      throw new BadRequestException("An account with that email already exists!");
     }
 
     const user = new User();
