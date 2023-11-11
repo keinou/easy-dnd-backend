@@ -48,7 +48,7 @@ export class ItemsController {
     return this.itemsService.findOne(id);
   }
 
-  @Delete('convert')
+  @Put('convert')
   convertWeight() {
     return this.itemsService.changedWeight();
   }

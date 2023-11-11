@@ -28,45 +28,47 @@ export class ItemsService {
 
   async changedWeight() {
     const itens = await this.itemModel.find();
+
     for (let i = 0; i < itens.length; i++) {
-      const item = new Item();
-      item.name = itens[i].name;
-      item.source = itens[i].source;
-      item.rarity = itens[i].rarity;
-      item.text = itens[i].text;
-      item.properties = itens[i].properties;
-      item.weight = itens[i].weight;
-      item.value = itens[i].value;
-      item.attunement = itens[i].attunement;
+      if (itens[i].strweight != null) {
+        if (itens[i].strweight.includes('oz')) {
+          const oz = parseFloat(itens[i].strweight.replace(',', '.'));
+          const kg = (oz * 0.02834952).toFixed(2);
 
-      await this.itemModel.create(item);
+          try {
+            await this.itemModel.findByIdAndUpdate(itens[i]._id, {
+              $set: { weight: parseFloat(kg) },
+            });
+          } catch (error) {
+            console.error('deu erro no ${itens[i]._id}');
+          }
+        }
+        if (itens[i].strweight.includes('lb')) {
+          const lb = parseFloat(itens[i].strweight.replace(',', '.'));
+          const kg = (lb * 0.45359237).toFixed(2);
+          try {
+            await this.itemModel.findByIdAndUpdate(itens[i]._id, {
+              $set: { weight: parseFloat(kg) },
+            });
+          } catch (error) {
+            console.error('deu erro no ${itens[i]._id}');
+          }
+        }
+      }
+
+      const newItem = new Item();
+      const item = await this.itemModel.findById(itens[i]._id);
+      newItem.name = item.name;
+      newItem.source = item.source;
+      newItem.rarity = item.rarity;
+      newItem.text = item.text;
+      newItem.properties = item.properties;
+      newItem.weight = item.weight;
+      newItem.value = item.value;
+      newItem.attunement = item.attunement;
+
+      await this.itemModel.create(newItem);
       await this.itemModel.findByIdAndRemove(itens[i]._id);
-
-      // if (itens[i].strweight != null) {
-      //   if (itens[i].strweight.includes('oz')) {
-      //     const oz = parseFloat(itens[i].strweight.replace(',', '.'));
-      //     const kg = (oz * 0.02834952).toFixed(2);
-
-      //     try {
-      //       await this.itemModel.findByIdAndUpdate(itens[i]._id, {
-      //         $set: { weight: parseFloat(kg) },
-      //       });
-      //     } catch (error) {
-      //       console.error('deu erro no ${itens[i]._id}');
-      //     }
-      //   }
-      //   if (itens[i].strweight.includes('lb')) {
-      //     const lb = parseFloat(itens[i].strweight.replace(',', '.'));
-      //     const kg = (lb * 0.45359237).toFixed(2);
-      //     try {
-      //       await this.itemModel.findByIdAndUpdate(itens[i]._id, {
-      //         $set: { weight: parseFloat(kg) },
-      //       });
-      //     } catch (error) {
-      //       console.error('deu erro no ${itens[i]._id}');
-      //     }
-      //   }
-      // }
     }
   }
 }
