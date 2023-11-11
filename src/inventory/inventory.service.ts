@@ -111,7 +111,9 @@ export class InventoryService {
     var totalPeso = 0;
     for (var i = 0; i < totalItems; i++) {
       const item = await this.itemService.findOne(inventory.items[i].item);
-      totalPeso += item.weight;
+      if (item.weight != null) {
+        totalPeso += item.weight;
+      }
     }
 
     return { totalItems: totalItems, totalWeigth: totalPeso };

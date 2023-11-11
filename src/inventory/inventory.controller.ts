@@ -33,6 +33,8 @@ export class InventoryController {
   }
 
   @Get('/resume')
+  @ApiOperation({summary: 'Obeter o total peso e total itens no inventario'})
+  @ApiResponse({status: 200, description: 'Resumiu o inventario com sucesso'})
   resumeInventory(@Request() req, @Param('id') id: string){
     return this.inventoryService.resumeInventory(id, req.user.sub)
   }
